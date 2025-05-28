@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charSet="utf-8" />
+    <meta name="author" content="Fahad Kabir">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>How to Install SonarQube on Ubuntu - Complete Guide</title>
+    <link rel="icon" href="./media/mPower-Logo.png" type="image/png">
+    <style>
+        .code-block {
+            background-color: #f8f8f8;
+            border-radius: 4px;
+            margin: 1em 0;
+            overflow: auto;
+        }
+
+        .code-heading {
+            background-color: #e8e8e8;
+            padding: 0.5em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding: 1em;
+            overflow-x: auto;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1em;
+            margin: 1em 0;
+        }
+
+        .tip {
+            background-color: #e7f8ff;
+            border-left: 4px solid #17a2b8;
+            padding: 1em;
+            margin: 1em 0;
+        }
+
+        .mpower {
+            background-color: #681215D9;
+            padding: 0.5em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <div class="max-w-[1368px] mx-auto m-0 my-2 md:my-8">
+            <main class="font-sans overflow-x-scroll md:overflow-x-visible min-h-screen flex align-items:flex-start">
+                <aside class="w-1/5 pr-4 pt-4 hidden md:block">
+                    <div class="sticky top-6 ml-4 flex flex-col gap-4">
+                        <div
+                            class="rounded-md border border-neutral-200 text-neutral-950 shadow dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-50 px-0 bg-gray-100">
+                            <div class="flex flex-col space-y-1.5 p-6 py-3 px-4">
+                                <h2 class="mpower leading-none tracking-tight p-0 font-medium">Installing SonarQube on
+                                    Ubuntu
+                                </h2>
+                                <h1 style="text-align: center;">
+                                    <a href="https://sonarqube.mpower-social.com" target="_blank">
+                                        mPower's Instance of SonarQube
+                                    </a>
+                                </h1>
+                            </div>
+                            <div data-orientation="horizontal" role="none"
+                                class="shrink-0 bg-neutral-200 dark:bg-neutral-800 h-[1px] w-full"></div>
+                            <div class="p-0">
+                                <ul class="text-sm text-gray-700">
+                                    <li class="px-4 py-1.5 text-dark-gray hover:bg-gray-100"><a href="#introduction"
+                                            class="font-normal">Introduction</a></li>
+                                    <li class="px-4 py-1.5 text-dark-gray hover:bg-gray-100"><a href="#prerequisites"
+                                            class="font-normal">Prerequisites</a></li>
+                                    <li class="px-4 py-1.5 text-dark-gray hover:bg-gray-100"><a href="#postgresql-setup"
+                                            class="font-normal">PostgreSQL Setup</a></li>
+                                    <li class="px-4 py-1.5 text-dark-gray hover:bg-gray-100"><a
+                                            href="#sonarqube-installation" class="font-normal">SonarQube
+                                            Installation</a>
+                                    </li>
+                                    <li class="px-4 py-1.5 text-dark-gray hover:bg-gray-100"><a
+                                            href="#sonarqube-configuration" class="font-normal">SonarQube
+                                            Configuration</a>
+                                    </li>
+                                    <li class="px-4 py-1.5 text-dark-gray hover:bg-gray-100"><a
+                                            href="#system-service-setup" class="font-normal">System Service Setup</a>
+                                    </li>
+                                    <li class="px-4 py-1.5 text-dark-gray hover:bg-gray-100"><a href="#access-sonarqube"
+                                            class="font-normal">Access SonarQube</a></li>
+                                    <li class="px-4 py-1.5 text-dark-gray hover:bg-gray-100"><a
+                                            href="#scanning-projects" class="font-normal">Scanning Projects</a></li>
+                                    <li class="px-4 py-1.5 text-dark-gray hover:bg-gray-100"><a href="#troubleshooting"
+                                            class="font-normal">Troubleshooting</a></li>
+                                    <li class="px-4 py-1.5 text-dark-gray hover:bg-gray-100 rounded-b"><a
+                                            href="#conclusion" class="font-normal">Conclusion</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+                <article class="w-screen md:w-4/5 lg:w-3/5 space-y-5 px-2 md:px-4 pt-2 md:pt-4">
+                    <h1 class="mpower" id="introduction">How to Install and Configure SonarQube on Ubuntu</h1>
+                    <p>SonarQube is a powerful open-source platform for continuous code quality inspection. It helps
+                        developers detect bugs, vulnerabilities, and code smells through static code analysis,
+                        supporting over 30 programming languages. This comprehensive guide will walk you through
+                        installing and configuring SonarQube on Ubuntu.
+                    </p>
+                    <div class="tip">
+                        <strong>Pro Tip:</strong> SonarQube is resource-intensive. For production environments, we
+                        recommend at least 4GB RAM and 2 CPU cores.
+                    </div>
+                    <h2 class="mpower" id="prerequisites">Prerequisites</h2>
+                    <p>Before beginning the installation, ensure you have:</p>
+                    <ul>
+                        <li>An Ubuntu server with sudo privileges</li>
+                        <li>Minimum 2GB RAM (4GB recommended for production)</li>
+                        <li>At least 10GB of free disk space</li>
+                        <li>Java 17 or later installed (we'll cover this in the guide)</li>
+                    </ul>
+                    <h2 class="mpower" id="postgresql-setup">PostgreSQL Database Setup</h2>
+                    <p>SonarQube requires PostgreSQL (version 10 or later) as its database backend. Follow these steps
+                        to set it up:
+                    </p>
+                    <h3>1. Install PostgreSQL</h3>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo apt update
+sudo apt install -y postgresql postgresql-contrib</code></pre>
+                    </div>
+                    <h3>2. Start and Enable PostgreSQL</h3>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo systemctl start postgresql
+sudo systemctl enable postgresql</code></pre>
+                    </div>
+                    <h3>3. Create Database and User</h3>
+                    <p>Connect to PostgreSQL and create a dedicated user and database for SonarQube:</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo -u postgres psql</code></pre>
+                    </div>
+                    <p>Then execute these SQL commands (replace <code style="font-size: 16px;">your_password</code> with
+                        a strong password):
+                    </p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>PostgreSQL</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">CREATE ROLE sonaruser WITH LOGIN ENCRYPTED PASSWORD 'your_password';
+CREATE DATABASE sonarqube;
+GRANT ALL PRIVILEGES ON DATABASE sonarqube TO sonaruser;
+\c sonarqube
+GRANT ALL PRIVILEGES ON SCHEMA public TO sonaruser;
+\q</code></pre>
+                    </div>
+                    <div class="warning">
+                        <strong>Security Note:</strong> Always use strong, unique passwords for database users. Consider
+                        using a password manager to generate and store them securely.
+                    </div>
+                    <h2 class="mpower" id="sonarqube-installation">SonarQube Installation</h2>
+                    <h3>1. Install Java 17</h3>
+                    <p>SonarQube requires Java 17 or later:</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo apt install -y openjdk-17-jdk</code></pre>
+                    </div>
+                    <h3>2. Verify Java Installation</h3>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">java -version</code></pre>
+                    </div>
+                    <h3>3. Download and Install SonarQube</h3>
+                    <p>Get the latest version from the <a href="https://www.sonarqube.org/downloads/"
+                            target="_blank">official downloads page</a>:</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-10.2.1.78527.zip
+sudo apt install -y unzip
+unzip sonarqube-*.zip -d /opt
+sudo mv /opt/sonarqube-* /opt/sonarqube</code></pre>
+                    </div>
+                    <h3>4. Create System User</h3>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo adduser --system --no-create-home --group --disabled-login sonarqube
+sudo chown -R sonarqube:sonarqube /opt/sonarqube</code></pre>
+                    </div>
+                    <h2 class="mpower" id="sonarqube-configuration">SonarQube Configuration</h2>
+                    <h3>1. Configure Database Connection</h3>
+                    <p>Edit the SonarQube configuration file:</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo nano /opt/sonarqube/conf/sonar.properties</code></pre>
+                    </div>
+                    <p>Update these settings (use the password you created earlier):</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>sonar.properties</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sonar.jdbc.username=sonaruser
+sonar.jdbc.password=your_password
+sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube
+sonar.web.javaAdditionalOpts=-server
+sonar.web.host=0.0.0.0
+sonar.web.port=9000</code></pre>
+                    </div>
+                    <h3>2. Configure System Limits</h3>
+                    <p>SonarQube requires increased system limits. Edit the sysctl configuration:</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo nano /etc/sysctl.conf</code></pre>
+                    </div>
+                    <p>Add these lines at the end:</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>sysctl.conf</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">vm.max_map_count=524288
+fs.file-max=131072</code></pre>
+                    </div>
+                    <p>Apply the changes:</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo sysctl -p</code></pre>
+                    </div>
+                    <h3>3. Configure User Limits</h3>
+                    <p>Create a new limits configuration file:</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo nano /etc/security/limits.d/99-sonarqube.conf</code></pre>
+                    </div>
+                    <p>Add these lines:</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>99-sonarqube.conf</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sonarqube   -   nofile   131072
+sonarqube   -   nproc    8192</code></pre>
+                    </div>
+                    <h2 class="mpower" id="system-service-setup">System Service Setup</h2>
+                    <h3>1. Create Systemd Service</h3>
+                    <p>Create a service file:</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo nano /etc/systemd/system/sonarqube.service</code></pre>
+                    </div>
+                    <p>Add this configuration:</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>sonarqube.service</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">[Unit]
+Description=SonarQube service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
+ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+
+User=sonarqube
+Group=sonarqube
+PermissionsStartOnly=true
+Restart=always
+
+StandardOutput=syslog
+LimitNOFILE=131072
+LimitNPROC=8192
+TimeoutStartSec=5
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target</code></pre>
+                    </div>
+                    <h3>2. Start and Enable SonarQube</h3>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo systemctl daemon-reload
+sudo systemctl enable sonarqube</code></pre>
+                    </div>
+                    <h3>3. Check Service Status</h3>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo systemctl status sonarqube</code></pre>
+                    </div>
+                    <h3>3. Reboot Machine</h3>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo reboot</code></pre>
+                    </div>
+                    <div class="tip">
+                        <strong>Note:</strong> Initial startup may take several minutes as SonarQube initializes its
+                        database.
+                    </div>
+                    <h2 class="mpower" id="access-sonarqube">Accessing SonarQube</h2>
+                    <p>Once SonarQube is running, access it at <code
+                            style="font-size: 16px;">http://your-server-ip:9000</code>.</p>
+                    <p><a href="https://sonarqube.mpower-social.com" target="_blank">mPower's Instance of SonarQube</a>
+                    </p>
+                    <h3>Initial Login</h3>
+                    <p>Use the default credentials:</p>
+                    <ul>
+                        <li>Username: <code style="font-size: 16px;">admin</code></li>
+                        <li>Password: <code style="font-size: 16px;">admin</code></li>
+                    </ul>
+                    <div class="warning">
+                        <strong>Important:</strong> Change the default admin password immediately after first login.
+                    </div>
+                    <h3>Creating a User Token</h3>
+                    <p>For CI/CD integration, create a user token:</p>
+                    <ol>
+                        <li>Go to <strong>Administration → Security → Users</strong></li>
+                        <li>Click on your username</li>
+                        <li>Go to the <strong>Tokens</strong> tab</li>
+                        <li>Generate a new token and save it securely</li>
+                    </ol>
+                    <h2 class="mpower" id="scanning-projects">Scanning Projects with SonarScanner (For Developers)</h2>
+                    <h3>1. Install SonarScanner</h3>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+unzip sonar-scanner-*.zip -d /opt
+sudo mv /opt/sonar-scanner-* /opt/sonar-scanner
+sudo chmod +x /opt/sonarscanner/bin/sonar-scanner
+sudo ln -s /opt/sonar-scanner/bin/sonar-scanner /usr/local/bin/sonar-scanner</code></pre>
+                    </div>
+                    <h3>2. Configure SonarScanner</h3>
+                    <p>Edit the configuration file:</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo nano /opt/sonar-scanner/conf/sonar-scanner.properties</code></pre>
+                    </div>
+                    <p>Set the SonarQube server URL:</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>sonar-scanner.properties</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sonar.host.url=http://localhost:9000</code></pre>
+                    </div>
+                    <h3>3. Check Sonar-scanner version</h3>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sonar-scanner -v</code></pre>
+                    </div>
+                    <p>Your output should be similar to the one below:</p>
+                    <div class="code-block">
+                        <pre><code style="font-size: 14px;">........
+13:33:31.946 INFO  SonarScanner CLI 7.0.1.4817
+13:33:31.950 INFO  Java 17.0.13 Eclipse Adoptium (64-bit)
+13:33:31.951 INFO  Linux 6.8.0-51-generic amd64</code></pre>
+                    </div>
+                    <h3>4. Scan a Project</h3>
+                    <p>Create a <code style="font-size: 16px;">sonar-project.properties</code> file in your project
+                        root:
+                    </p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>sonar-project.properties</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sonar.projectKey=my_project
+sonar.projectName=My Project
+sonar.projectVersion=1.0
+sonar.sources=.
+sonar.sourceEncoding=UTF-8</code></pre>
+                    </div>
+                    <p>Run the scanner (replace TOKEN with your user token):</p>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sonar-scanner -Dsonar.login=TOKEN</code></pre>
+                    </div>
+                    <h2 class="mpower" id="troubleshooting">Troubleshooting</h2>
+                    <h3>Common Issues</h3>
+                    <ul>
+                        <li><strong>SonarQube won't start:</strong> Check logs at
+                            <code style="font-size: 16px;">/opt/sonarqube/logs/sonar.log</code>
+                        </li>
+                        <li><strong>Database connection issues:</strong> Verify PostgreSQL is running and credentials
+                            are correct
+                        </li>
+                        <li>
+                            <strong>Memory errors:</strong> Increase Java heap size in
+                            <code style="font-size: 16px;">/opt/sonarqube/conf/sonar.properties</code>:
+                            <pre><code style="font-size: 16px;">sonar.ce.javaOpts=-Xmx2g -Xms512m -XX:+HeapDumpOnOutOfMemoryError</code></pre>
+                        </li>
+                    </ul>
+                    <h3>Viewing Logs</h3>
+                    <div class="code-block">
+                        <div class="code-heading">
+                            <span>Terminal</span>
+                        </div>
+                        <pre><code style="font-size: 16px;">sudo tail -f /opt/sonarqube/logs/sonar.log</code></pre>
+                    </div>
+                    <h2 class="mpower" id="conclusion">Conclusion</h2>
+                    <p>You've successfully installed SonarQube on Ubuntu. For production environments, consider:
+                    </p>
+                    <ul>
+                        <li>Setting up Nginx/Apache as a reverse proxy with SSL</li>
+                        <li>Configuring automated backups for the PostgreSQL database</li>
+                        <li>Setting up monitoring for the SonarQube service</li>
+                        <li>Integrating with your CI/CD pipeline</li>
+                    </ul>
+                    <p>For more advanced configurations, refer to the <a href="https://docs.sonarqube.org/latest/"
+                            target="_blank">official SonarQube documentation</a>.</p>
+                </article>
+            </main>
+        </div>
+    </section>
+</body>
+<footer style="background-color: #f2f2f2; padding: 0.5em 1em; text-align: center; font-size: 0.9em; color: #333;">
+    <p style="margin: 0;">&copy; 2025 mPower Social Enterprises. All rights reserved.</p>
+    <p style="margin: 0;">Author: Fahad Kabir</p>
+    <p style="margin: 0.2em 0;">
+        <a href="https://mpower-social.com" target="_blank" style="color: #007bff; text-decoration: none;">mPower
+            website</a>
+        &nbsp;|&nbsp;
+        <a href="https://sonarqube.mpower-social.com" target="_blank"
+            style="color: #007bff; text-decoration: none;">mPower's SonarQube</a>
+    </p>
+</footer>
+
+</html>
